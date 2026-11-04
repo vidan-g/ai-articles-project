@@ -2,7 +2,7 @@
 
 An automated AI intelligence platform and TypeScript web application that curates, deduplicates, and presents the **5 most important AI stories from the last 24 hours** across **OpenAI, Anthropic, Google, Apple, Meta, and Microsoft**.
 
-Every morning at **9:00 AM (`Europe/Skopje`)**, a scheduled research agent searches primary sources, checks the rolling archive ([`AI_DIGEST.md`](./AI_DIGEST.md)) to prevent duplicate stories, and prepends a structured briefing with summaries, impact analysis (*Why It Matters*), and original source links.
+Every morning at **9:00 AM**, a scheduled research agent searches primary sources, checks the rolling archive ([`AI_DIGEST.md`](./AI_DIGEST.md)) to prevent duplicate stories, and prepends a structured briefing with summaries, impact analysis (*Why It Matters*), and original source links.
 
 ---
 
