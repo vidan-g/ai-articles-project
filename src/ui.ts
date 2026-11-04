@@ -284,7 +284,7 @@ export function renderDashboardHtml(
 <body>
   <div class="container">
     <header>
-      <div class="eyebrow">Automated Frontier AI Research Agent • Skopje (CET/CEST)</div>
+      <div class="eyebrow">Automated Frontier AI Research Agent</div>
       <h1>Daily AI News Digest</h1>
       <p class="subtitle">
         Curated daily briefing of the 5 most important AI launches, frontier models, and research breakthroughs across OpenAI, Anthropic, Google, Apple, Meta, and Microsoft.
@@ -306,7 +306,7 @@ export function renderDashboardHtml(
       </div>
       <div class="stat-card">
         <div class="stat-label">Schedule</div>
-        <div class="stat-value">09:00 Skopje</div>
+        <div class="stat-value">Daily 09:00</div>
       </div>
     </section>
 
