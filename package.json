@@ -1,0 +1,34 @@
+{
+  "name": "ai-daily-research-digest",
+  "version": "1.0.0",
+  "description": "TypeScript web application, parser, deduplication engine, and CLI for Daily AI Research Digests",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "tsx src/server.ts",
+    "cli": "tsx src/cli.ts",
+    "export:html": "tsx src/cli.ts export-html",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "ai",
+    "research-agent",
+    "digest",
+    "typescript",
+    "openai",
+    "anthropic",
+    "google-deepmind",
+    "automation"
+  ],
+  "author": "Vidan Gjozev <vidan.gjozev@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
