@@ -6,12 +6,31 @@ import {
   DigestRepository,
   filterStories,
 } from './digestManager.js';
+import { ensureTodayBriefing } from './scanner.js';
 import { renderDashboardHtml } from './ui.js';
 
 async function main(): Promise<void> {
   const [command = 'stats', ...rest] = process.argv.slice(2);
   const digestPath = path.resolve(process.cwd(), 'AI_DIGEST.md');
+  const staticHtmlPath = path.resolve(process.cwd(), 'docs/index.html');
   const repo = new DigestRepository(digestPath);
+
+  if (command === 'scan') {
+    const force = rest.includes('--force');
+    const result = await ensureTodayBriefing(repo, {
+      force,
+      onUpdated: async () => {
+        const briefings = await repo.loadBriefings();
+        const stats = computeDigestStats(briefings);
+        const html = renderDashboardHtml(briefings, stats);
+        await fs.mkdir(path.dirname(staticHtmlPath), { recursive: true });
+        await fs.writeFile(staticHtmlPath, html, 'utf8');
+      },
+    });
+    console.log(JSON.stringify(result, null, 2));
+    return;
+  }
+
   const briefings = await repo.loadBriefings();
 
   if (command === 'stats') {
@@ -58,7 +77,7 @@ async function main(): Promise<void> {
   }
 
   console.error(
-    `Unknown command "${command}". Available commands: stats, list, check-duplicate, export-html`
+    `Unknown command "${command}". Available commands: scan, stats, list, check-duplicate, export-html`
   );
   process.exitCode = 1;
 }

@@ -25,11 +25,12 @@ describe('HTTP Server & REST API', () => {
     });
   });
 
-  it('GET /health returns status ok', async () => {
+  it('GET /health returns status ok and current date', async () => {
     const res = await fetch(`${baseUrl}/health`);
     expect(res.status).toBe(200);
     const body = await res.json();
-    expect(body).toEqual({ status: 'ok' });
+    expect(body.status).toBe('ok');
+    expect(body.today).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
 
   it('GET / renders the HTML dashboard', async () => {
@@ -39,6 +40,7 @@ describe('HTTP Server & REST API', () => {
     const html = await res.text();
     expect(html).toContain('Daily AI News Digest');
     expect(html).toContain('Gemini 4 Carbon');
+    expect(html).toContain('Scan New Articles');
   });
 
   it('GET /api/stats returns digest statistics', async () => {

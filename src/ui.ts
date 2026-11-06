@@ -73,6 +73,13 @@ export function renderDashboardHtml(
       padding-bottom: 1.75rem;
       border-bottom: 1px solid var(--border);
     }
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
     .eyebrow {
       display: inline-flex;
       align-items: center;
@@ -83,6 +90,25 @@ export function renderDashboardHtml(
       letter-spacing: 0.06em;
       text-transform: uppercase;
     }
+    .scan-btn {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .scan-btn:hover:not(:disabled) {
+      background: var(--accent);
+      color: #0b0f19;
+    }
+    .scan-btn:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
     h1 {
       font-size: 2.2rem;
       font-weight: 700;
@@ -92,6 +118,16 @@ export function renderDashboardHtml(
       color: var(--muted);
       max-width: 720px;
       font-size: 1rem;
+    }
+    .status-toast {
+      display: none;
+      margin-bottom: 1.25rem;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #bae6fd;
+      font-size: 0.9rem;
     }
     .stats-bar {
       display: grid;
@@ -284,12 +320,17 @@ export function renderDashboardHtml(
 <body>
   <div class="container">
     <header>
-      <div class="eyebrow">Automated Frontier AI Research Agent</div>
+      <div class="header-top">
+        <div class="eyebrow">Automated Frontier AI Research Agent</div>
+        <button id="scanNowBtn" class="scan-btn" type="button">↻ Scan New Articles</button>
+      </div>
       <h1>Daily AI News Digest</h1>
       <p class="subtitle">
         Curated daily briefing of the 5 most important AI launches, frontier models, and research breakthroughs across OpenAI, Anthropic, Google, Apple, Meta, and Microsoft.
       </p>
     </header>
+
+    <div id="statusToast" class="status-toast"></div>
 
     <section class="stats-bar">
       <div class="stat-card">
@@ -305,8 +346,8 @@ export function renderDashboardHtml(
         <div class="stat-value">${escapeHtml(stats.latestDate ?? 'N/A')}</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Schedule</div>
-        <div class="stat-value">Daily 09:00</div>
+        <div class="stat-label">Scanner Mode</div>
+        <div class="stat-value">Auto on Wake</div>
       </div>
     </section>
 
@@ -315,7 +356,7 @@ export function renderDashboardHtml(
         id="searchInput"
         class="search-input"
         type="search"
-        placeholder="Search models, announcements, research papers, or companies (e.g., Gemini 4, GPT-6, robots.txt)..."
+        placeholder="Search models, announcements, research papers, or companies (e.g., Gemini 4, GPT-6, FlashProve)..."
       />
       <div class="chips" id="companyChips">
         ${companyButtonsHtml}
@@ -333,6 +374,8 @@ export function renderDashboardHtml(
     const container = document.getElementById('digestContainer');
     const searchInput = document.getElementById('searchInput');
     const chipButtons = document.querySelectorAll('.chip');
+    const scanNowBtn = document.getElementById('scanNowBtn');
+    const statusToast = document.getElementById('statusToast');
 
     function escapeClientHtml(str) {
       const div = document.createElement('div');
@@ -426,6 +469,28 @@ export function renderDashboardHtml(
         render();
       });
     });
+
+    if (scanNowBtn) {
+      scanNowBtn.addEventListener('click', async () => {
+        scanNowBtn.disabled = true;
+        scanNowBtn.textContent = 'Scanning feeds...';
+        statusToast.style.display = 'block';
+        statusToast.textContent = 'Scanning live AI sources (OpenAI, Anthropic, Google, Apple, Meta, Microsoft)...';
+        try {
+          const res = await fetch('/api/scan?force=true', { method: 'POST' });
+          const result = await res.json();
+          statusToast.textContent = result.reason || 'Scan complete!';
+          if (result.storiesAdded > 0) {
+            setTimeout(() => window.location.reload(), 800);
+          }
+        } catch (err) {
+          statusToast.textContent = 'Could not reach local server scan endpoint.';
+        } finally {
+          scanNowBtn.disabled = false;
+          scanNowBtn.textContent = '↻ Scan New Articles';
+        }
+      });
+    }
 
     render();
   </script>

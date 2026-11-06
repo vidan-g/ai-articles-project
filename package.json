@@ -1,12 +1,14 @@
 {
   "name": "ai-daily-research-digest",
-  "version": "1.0.0",
-  "description": "TypeScript web application, parser, deduplication engine, and CLI for Daily AI Research Digests",
+  "version": "1.1.0",
+  "description": "TypeScript web application, auto-on-wake live AI news scanner, parser, deduplication engine, and CLI for Daily AI Research Digests",
   "type": "module",
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "tsx src/server.ts",
+    "scan": "tsx src/cli.ts scan",
+    "scan:force": "tsx src/cli.ts scan --force",
     "cli": "tsx src/cli.ts",
     "export:html": "tsx src/cli.ts export-html",
     "test": "vitest run",
