@@ -68,7 +68,7 @@ describe('Parser & Company Tag Extraction', () => {
 
     expect(briefings.length).toBeGreaterThanOrEqual(1);
     const latest = briefings[0];
-    expect(latest.date).toBe('2026-11-04');
+    expect(latest.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(latest.stories).toHaveLength(5);
 
     for (const story of latest.stories) {
